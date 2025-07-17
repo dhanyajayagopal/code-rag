@@ -1,193 +1,175 @@
-Code RAG — AI-Powered Code Documentation System
-This is a Retrieval-Augmented Generation (RAG) system I built for code documentation and semantic exploration of codebases. I designed it to support intelligent search and question-answering over code, using modern NLP and vector search techniques. The system supports local inference, making it suitable for offline or privacy-sensitive development environments.
+# Code RAG — AI-Powered Code Documentation System
 
-What I Built
-Project Purpose
+**Code RAG** is a Retrieval-Augmented Generation (RAG) system I built for code documentation and semantic exploration of codebases. I designed it to support intelligent search and question-answering over code, using modern NLP and vector search techniques. The system supports local inference, making it suitable for offline or privacy-sensitive development environments.
+
+---
+
+## What I Built
+
+### Project Purpose
 I developed Code RAG to enable developers to ask natural-language questions about their codebases and receive contextually accurate answers. The system combines static code parsing with deep semantic understanding through embeddings.
 
-Architecture Overview
+### Architecture Overview
+
 I implemented a complete RAG pipeline tailored for code. The major components include:
 
-Code Parsing: I wrote AST-based parsers for Python, JavaScript, and TypeScript.
+- **Code Parsing**: AST-based parsers for Python, JavaScript, and TypeScript.
+- **Embedding Generation**: Sentence transformer models to represent code semantics.
+- **Vector Storage**: Integrated ChromaDB for fast and scalable similarity search.
+- **Query Interface**: CLI tool with rich terminal output.
+- **Incremental Indexing**: Hash-based change detection to avoid unnecessary reprocessing.
 
-Embedding Generation: I used sentence transformer models to represent code semantics.
+---
 
-Vector Storage: I integrated ChromaDB for fast and scalable similarity search.
+## What I Learned
 
-Query Interface: I built a CLI tool with rich terminal output.
+### Vector Embeddings & Semantic Search
 
-Incremental Indexing: I added hash-based change detection to avoid unnecessary reprocessing.
+- Used sentence-transformer models to embed code into 384-dimensional vectors.
+- Learned how cosine similarity improves search relevance over keyword matching.
+- Explored trade-offs between model size, inference speed, and accuracy.
 
-What I Learned
-Vector Embeddings & Semantic Search
-I applied sentence-transformer models to embed code into 384-dimensional vectors.
+### End-to-End RAG Design
 
-I studied how cosine similarity improves search relevance beyond simple keyword matching.
+- Built a full retrieval system: parsing, chunking, embedding, answer generation.
+- Designed chunking strategies that preserve contextual meaning in code.
+- Implemented fallback mechanisms for when AI models are unavailable.
 
-I explored trade-offs between embedding model size, inference speed, and accuracy.
+### Performance Engineering
 
-End-to-End RAG Design
-I built a complete retrieval system that spans parsing, chunking, embedding, and answer generation.
+- Created a hash-based incremental indexer to avoid full reprocessing.
+- Optimized memory usage and latency in the embedding/retrieval loop.
+- Supported large codebases via configurable ignore patterns.
 
-I implemented chunking strategies that preserve contextual meaning in code.
+### Developer Tooling
 
-I added fallback strategies for situations where AI models are unavailable or limited.
+- Developed a production-ready CLI using `click` and `rich` with error handling and progress bars.
+- Built a flexible configuration system for different project types.
+- Packaged the tool for pip-based installation with proper entry points.
+  
+---
 
-Performance Engineering
-I created a hash-based incremental indexer to avoid full reprocessing.
+## Usage
 
-I optimized memory usage and search latency through careful embedding and retrieval design.
+### Basic Operations
 
-I made large codebases manageable by supporting configurable ignore patterns.
+**Index a codebase:**  
+Index your project directory to prepare it for semantic search and question answering.
 
-Developer Tooling
-I developed a production-ready CLI using click and rich with error handling and progress bars.
+**Search for code:**  
+Perform a natural-language search across your indexed codebase.
 
-I built a configuration system to support various project types.
+**Ask questions about the code:**  
+Query the system with high-level or implementation-specific questions to get intelligent answers.
 
-I packaged the system for pip-based installation with proper entry points.
+---
 
-Installation
-bash
-Copy
-Edit
-pip install code-rag
-Usage
-Basic Operations
-Index a codebase:
+### Advanced Features
 
-bash
-Copy
-Edit
-code-rag index /path/to/project
-Search for code:
+**Index a GitHub repo:**  
+Fetch and index code directly from public GitHub repositories.
 
-bash
-Copy
-Edit
-code-rag search "authentication logic"
-Ask questions about the code:
+**Filter search results:**  
+Narrow down search results using type or file pattern filters.
 
-bash
-Copy
-Edit
-code-rag ask "How does user login work?"
-Advanced Features
-Index a GitHub repo:
+**View indexing statistics:**  
+See detailed stats about the indexed project, including file count, function count, and chunking metrics.
 
-bash
-Copy
-Edit
-code-rag index-github https://github.com/pallets/flask
-Filter search results:
+---
 
-bash
-Copy
-Edit
-code-rag search "database" --type-filter function --file-filter "*.py"
-View indexing statistics:
+## Configuration
 
-bash
-Copy
-Edit
-code-rag stats
-Configuration
-Initialize a configuration file:
+**Initialize a configuration file:**  
+Set up a project-specific config file to customize indexing behavior.
 
-bash
-Copy
-Edit
-code-rag init
-Example .coderag.json:
+**Example Configuration Includes:**
 
-json
-Copy
-Edit
-{
-  "file_patterns": ["*.py", "*.js", "*.jsx", "*.ts", "*.tsx"],
-  "ignore_patterns": [
-    "node_modules/**",
-    ".git/**", 
-    "__pycache__/**",
-    "venv/**"
-  ],
-  "max_file_size": 1048576,
-  "embedding_model": "all-MiniLM-L6-v2"
-}
-Implementation Highlights
-Code Parsing
-I used regex and ASTs to extract functions, classes, imports, and docstrings, preserving the semantic structure of the code.
+- File patterns to include (e.g., Python, JS, TS)
+- Folders to ignore (e.g., node_modules, venv)
+- Max file size limits
+- Embedding model selection
 
-Embedding Strategy
-I generated embeddings from structured, searchable representations of each code chunk.
+---
 
-Vector Search
-I used cosine similarity in ChromaDB for semantic search and metadata-filtered ranking.
+## Implementation Highlights
 
-Incremental Indexing
-I implemented MD5-based change detection to avoid reprocessing unchanged files.
+### Code Parsing
 
-Example Query Types
-“How is user authentication implemented?”
+Used regex and AST-based methods to extract functions, classes, imports, and docstrings, preserving the structure and semantics of the code.
 
-“What are the main API endpoints?”
+### Embedding Strategy
 
-“Where is input validation performed?”
+Built semantic vector representations of code chunks using transformer-based models for accurate similarity comparisons.
 
-“How are exceptions handled in this codebase?”
+### Vector Search
 
-Performance Benchmarks
-Indexing: ~1000 lines/sec
+Employed cosine similarity in a vector database for fast, relevant code retrieval with support for metadata filtering.
 
-Search latency: <100ms
+### Incremental Indexing
 
-Memory usage: ~2GB for embeddings
+Implemented change detection using hash functions to skip unchanged files and reduce indexing time.
 
-Storage overhead: ~10MB per 100k lines of code
+---
 
-Challenges I Solved
-Preserving Context
-I ensured chunks retained imports, class structure, and docstrings.
+## Example Query Types
 
-Multi-language Support
-I built a modular parsing architecture to support multiple languages consistently.
+- How is user authentication implemented?  
+- What are the main API endpoints?  
+- Where is input validation performed?  
+- How are exceptions handled in this codebase?  
 
-Scalability
-I enabled streaming, parallel processing, and chunk size tuning to support large repositories.
+---
 
-Validation
-I tested Code RAG on open-source projects like:
+## Performance Benchmarks
 
-Flask (15k lines, 500 functions)
+- Indexing throughput: approximately 1000 lines per second  
+- Search latency: under 100 milliseconds  
+- Memory footprint: around 2GB for medium-large codebases  
+- Storage overhead: about 10MB per 100k lines of code  
 
-FastAPI (25k lines, 800 functions)
+---
 
-React (50k lines, 1200 functions)
+## Challenges I Solved
 
-I manually evaluated query relevance on 100+ natural language questions.
+### Preserving Context
 
-Future Improvements
-Technical Enhancements
-Multi-modal embeddings (code + docs)
+Ensured code chunks included imports, docstrings, and surrounding class/function context for semantic completeness.
 
-Graph-based call structure modeling
+### Multi-language Support
 
-Real-time streaming embeddings
+Built modular parsing logic to support Python, JavaScript, and TypeScript with consistent structure extraction.
 
-User Experience
-Web interface
+### Scalability
 
-IDE integration
+Enabled parallel and streaming indexing, along with customizable chunk sizes and ignore rules for handling large repositories.
 
-Collaborative annotations
+---
 
-Dependencies
-sentence-transformers: for embeddings
+## Validation
 
-chromadb: for vector search
+Tested Code RAG on well-known open-source projects and evaluated query accuracy on over 100 natural-language questions to ensure high relevance and reliability.
 
-click: for CLI building
+---
 
-rich: for CLI display and formatting
+## Future Improvements
 
-transformers: for local LLM inference
+### Technical Enhancements
+
+- Multi-modal embeddings (combining code and documentation)
+- Call graph modeling using graph neural networks
+- Real-time streaming for continuous embedding updates
+
+### User Experience
+
+- Browser-based UI for easier access
+- IDE plugin for in-context querying
+- Collaborative features like annotation and feedback sharing
+
+---
+
+## Dependencies
+
+- Sentence embedding models for semantic understanding  
+- Vector database for efficient retrieval  
+- CLI libraries for user interaction and output formatting  
+- Transformer-based language models for local inference  
