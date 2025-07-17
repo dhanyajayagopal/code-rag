@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: code-rag
+Version: 0.1.0
+Requires-Dist: sentence-transformers>=2.2.0
+Requires-Dist: chromadb>=0.4.0
+Requires-Dist: openai>=1.0.0
+Requires-Dist: click>=8.0.0

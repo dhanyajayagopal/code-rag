@@ -1,0 +1,22 @@
+{
+  "index_directory": "./chroma_db",
+  "file_patterns": [
+    "*.py",
+    "*.js",
+    "*.jsx",
+    "*.ts",
+    "*.tsx"
+  ],
+  "ignore_patterns": [
+    "node_modules/**",
+    ".git/**",
+    "__pycache__/**",
+    "*.pyc",
+    ".venv/**",
+    "venv/**",
+    "build/**",
+    "dist/**"
+  ],
+  "max_file_size": 1048576,
+  "embedding_model": "all-MiniLM-L6-v2"
+}

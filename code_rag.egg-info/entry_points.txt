@@ -1,0 +1,2 @@
+[console_scripts]
+code-rag = src.cli:cli
